@@ -1,4 +1,4 @@
-import Cocoa
+import Foundation
 
 public class SwiftWordNumber {
     fileprivate static let WORD_SEPARATORS = [" and ", ",", "-", " "]
