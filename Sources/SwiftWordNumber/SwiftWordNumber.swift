@@ -1,6 +1,6 @@
 import Cocoa
 
-class SwiftWordNumber {
+public class SwiftWordNumber {
     fileprivate static let WORD_SEPARATORS = [" and ", ",", "-", " "]
     fileprivate static let wordsNumber: [String: UInt64] = [
         "one": 1,
@@ -45,7 +45,7 @@ class SwiftWordNumber {
         return r
     }()
 
-    enum NumberWordsError: Error {
+    public enum NumberWordsError: Error {
         case MustBePositive(message: String)
         case InvalidFigure(message: String)
     }
@@ -78,7 +78,7 @@ class SwiftWordNumber {
         }
     }
 
-    static func wordsToNumber(word: String) -> Result<UInt64, Error> {
+    public static func wordsToNumber(word: String) -> Result<UInt64, Error> {
         let parts: [String] = splitString(string: word, separators: WORD_SEPARATORS)
 
         var results = [UInt64]()
@@ -149,7 +149,7 @@ class SwiftWordNumber {
         return Result.success(total)
     }
 
-    static func numberToWords(number: UInt64) -> Result<String, Error> {
+    public static func numberToWords(number: UInt64) -> Result<String, Error> {
         guard number > 0 else {
             return Result.failure(NumberWordsError.MustBePositive(message: "Number must be positive"))
         }
@@ -200,9 +200,12 @@ class SwiftWordNumber {
         return words[0]
     }
 
-    static func formatNumber(number: UInt64) -> String {
-        guard number > 999 else {
-            return "\(number)"
+    public static func formatNumber(number: UInt64) -> Result<String, Error> {
+        guard number < 0 else {
+            return Result.failure(NumberWordsError.MustBePositive(message: "Number must be positive integer"))
+        }
+        guard number > 0 && number < 1000 else {
+            return Result.success("\(number)")
         }
         var numberString: String = "\(number)"
         let chunk = 3
@@ -211,7 +214,10 @@ class SwiftWordNumber {
 
         var result = [String]()
         while end > 0 {
+            
             result.append(String(numberString.suffix(chunk)))
+            
+            
             end = end - chunk
             if end < 0 {
                 break
@@ -219,6 +225,6 @@ class SwiftWordNumber {
             numberString = String(numberString.prefix(end))
         }
 
-        return result.reversed().joined(separator: ",")
+        return Result.success(result.reversed().joined(separator: ","))
     }
 }
