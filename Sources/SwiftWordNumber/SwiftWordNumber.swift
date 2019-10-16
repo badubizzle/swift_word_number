@@ -201,11 +201,17 @@ public class SwiftWordNumber {
     }
 
     public static func formatNumber(number: UInt64) -> Result<String, Error> {
-        guard number < 0 else {
+        guard number > 0 else {
             return Result.failure(NumberWordsError.MustBePositive(message: "Number must be positive integer"))
         }
         
         var numberString: String = "\(number)"
+        
+        guard number >= 1000  else {
+            return Result.success(numberString)
+        }
+        
+        
         let chunk = 3
 
         var end = numberString.count
