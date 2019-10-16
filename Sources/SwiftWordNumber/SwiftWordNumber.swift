@@ -204,9 +204,7 @@ public class SwiftWordNumber {
         guard number < 0 else {
             return Result.failure(NumberWordsError.MustBePositive(message: "Number must be positive integer"))
         }
-        guard number > 0 && number < 1000 else {
-            return Result.success("\(number)")
-        }
+        
         var numberString: String = "\(number)"
         let chunk = 3
 
